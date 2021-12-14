@@ -1,0 +1,145 @@
+/** @format */
+
+* {
+	font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+	font-size: 26px;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #eee;
+}
+
+.container {
+	background-color: #222;
+	border: 5px solid #222;
+	box-shadow: 6px 8px 20px rgba(0, 0, 0, 0.4);
+	/* border-radius: 10px; */
+	display: flex;
+	flex-direction: column;
+	margin: 80px auto;
+	max-width: 350px;
+	max-height: 750px;
+}
+
+.row {
+	display: flex;
+	/* gap: 10px; */
+	text-align: center;
+	justify-content: space-between;
+	border-bottom: 1px solid #222;
+}
+
+.row:last-child {
+	border-bottom: none;
+}
+
+.col:first-child {
+	border-right: 1px solid #222;
+}
+
+.row.numbers div {
+	flex-grow: 5;
+	flex-shrink: 1;
+	flex-basis: 100px;
+	border-right: 1px solid #222;
+}
+
+.row.numbers div:last-child {
+	border: none;
+}
+
+.col.numbers {
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+.col.operators div {
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+.col {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.display {
+	background-color: rgb(214, 214, 214);
+	justify-content: flex-end;
+	padding: 20px 10px;
+	min-height: 75px;
+}
+
+.clear-display {
+	flex: 1 1 auto;
+	background-color: chocolate;
+	color: #eee;
+	padding: 5px 0;
+}
+
+.clear-display:hover {
+	background-color: rgb(158, 79, 22);
+}
+
+.number,
+.operator,
+.equals {
+	min-width: 80px;
+	min-height: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.number {
+	background-color: #666;
+	color: #eee;
+}
+
+.number:hover {
+	background-color: #777;
+}
+
+.equals,
+.operator {
+	background-color: coral;
+	color: #eee;
+	flex: 1 1 auto;
+}
+
+.operator {
+	border-bottom: 1px solid #222;
+}
+
+.operator:last-child {
+	border-bottom: none;
+}
+
+.operator:hover,
+.equals:hover {
+	background-color: rgb(189, 94, 60);
+}
+
+.disable-select {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.active {
+	background-color: rgb(255, 90, 30);
+	border: 1px dashed #eee;
+}
+
+.active:hover {
+	background-color: rgb(206, 75, 27);
+}

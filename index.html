@@ -1,0 +1,54 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calculator</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<section class="row display">
+				<div id="displayArea">max-char limit this area</div>
+			</section>
+			<section class="row">
+				<div id="clear" class="clear-display disable-select">CLEAR</div>
+			</section>
+			<section class="row disable-select">
+				<div class="col numbers">
+					<div class="row numbers">
+						<div id="seven" class="number">7</div>
+						<div id="eight" class="number">8</div>
+						<div id="nine" class="number">9</div>
+					</div>
+					<div class="row numbers">
+						<div id="four" class="number">4</div>
+						<div id="five" class="number">5</div>
+						<div id="six" class="number">6</div>
+					</div>
+					<div class="row numbers">
+						<div id="one" class="number">1</div>
+						<div id="two" class="number">2</div>
+						<div id="three" class="number">3</div>
+					</div>
+
+					<div class="row numbers">
+						<div id="zero" class="number">0</div>
+						<div id="decimal" class="number">.</div>
+						<div id="equals" class="equals">=</div>
+					</div>
+				</div>
+				<aside class="col operators">
+					<div id="multiply" class="operator">*</div>
+					<div id="divide" class="operator">/</div>
+					<div id="subtract" class="operator">-</div>
+					<div id="add" class="operator">+</div>
+				</aside>
+			</section>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>
