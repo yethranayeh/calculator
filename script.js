@@ -3,12 +3,38 @@
 const displayArea = document.querySelector("#displayArea");
 const deleteInputBtn = document.querySelector("#deleteInput");
 const clearDisplayBtn = document.querySelector("#clear");
-const numbers = document.querySelectorAll(".number");
+const numbersDOM = document.querySelectorAll(".number");
 const decimal = document.querySelector("#decimal");
-const operators = document.querySelectorAll(".operator");
+const operatorsDOM = document.querySelectorAll(".operator");
 const equals = document.querySelector("#equals");
 
-deleteInputBtn.addEventListener("click", (e) => {
+deleteInputBtn.addEventListener("click", deleteInput);
+
+// Click handling
+clearDisplayBtn.addEventListener("click", function () {
+	clearDisplay(true);
+});
+
+numbersDOM.forEach((number) => {
+	number.addEventListener("click", clickEventHandler);
+});
+
+operatorsDOM.forEach((operator) => {
+	operator.addEventListener("click", clickEventHandler);
+});
+
+equals.addEventListener("click", clickEventHandler);
+
+// Key presses
+window.addEventListener("keydown", keyEventHandler);
+
+function display(number) {
+	if (displayArea.textContent.length < 23) {
+		displayArea.textContent += number;
+	}
+}
+
+function deleteInput() {
 	let currentText = displayArea.textContent;
 	if (currentText === "NaN") {
 		displayArea.textContent = "";
@@ -19,31 +45,11 @@ deleteInputBtn.addEventListener("click", (e) => {
 		}
 		displayArea.textContent = currentText.slice(0, currentText.length - 1);
 	}
-});
-
-clearDisplayBtn.addEventListener("click", function () {
-	clearDisplay(true);
-});
-
-numbers.forEach((number) => {
-	number.addEventListener("click", eventHandler);
-});
-
-operators.forEach((operator) => {
-	operator.addEventListener("click", eventHandler);
-});
-
-equals.addEventListener("click", eventHandler);
-
-function display(number) {
-	if (displayArea.textContent.length < 23) {
-		displayArea.textContent += number;
-	}
 }
 
 function clearDisplay(hard) {
 	displayArea.textContent = "";
-	// Remove "active" class from operators
+	// Remove "active" class from operatorsDOM
 	removeActiveClass();
 	// De-activate decimal after clearing display
 	decimalState(0);
@@ -51,12 +57,12 @@ function clearDisplay(hard) {
 	resultDisplayed = false;
 	operatorActive = false;
 	if (hardClear) {
-		operator = undefined;
+		previousOperator = undefined;
 	}
 }
 
 function removeActiveClass() {
-	operators.forEach((operator) => {
+	operatorsDOM.forEach((operator) => {
 		operator.classList.remove("active");
 	});
 }
@@ -76,67 +82,67 @@ function decimalState(state) {
 }
 
 function performEquation(operator) {
-	console.log("perform eq");
-	console.log(operator);
-	if (operator === "add") {
-		console.log(`Adding prevNum: ${previousNumber} + displayNum: ${Number(displayArea.textContent)}`);
+	if (operator === "add" || operator == "+") {
+		// console.log(`Adding prevNum: ${previousNumber} + displayNum: ${Number(displayArea.textContent)}`);
 		return previousNumber + Number(displayArea.textContent);
 	} else if (operator === "subtract") {
-		console.log(`Subtracting prevNum: ${previousNumber} - displayNum: ${Number(displayArea.textContent)}`);
+		// console.log(`Subtracting prevNum: ${previousNumber} - displayNum: ${Number(displayArea.textContent)}`);
 		return previousNumber - Number(displayArea.textContent);
 	} else if (operator === "multiply") {
-		console.log(`Multiplying prevNum: ${previousNumber} * displayNum: ${Number(displayArea.textContent)}`);
+		// console.log(`Multiplying prevNum: ${previousNumber} * displayNum: ${Number(displayArea.textContent)}`);
 		return previousNumber * Number(displayArea.textContent);
 	} else if (operator === "divide") {
-		console.log(`Dividing prevNum: ${previousNumber} / displayNum: ${Number(displayArea.textContent)}`);
+		// console.log(`Dividing prevNum: ${previousNumber} / displayNum: ${Number(displayArea.textContent)}`);
 		return previousNumber / Number(displayArea.textContent);
 	}
 	resultDisplayed = true;
 	// Remove operator name
-	operator = undefined;
+	previousOperator = undefined;
+}
+
+function showResult() {
+	removeActiveClass();
+	decimalState(0);
+	if (!resultDisplayed || !Number(displayArea.textContent) === NaN) {
+		displayArea.textContent = performEquation(previousOperator);
+		resultDisplayed = true;
+		previousOperator = undefined;
+	} else {
+		clearDisplay(true);
+	}
+}
+
+function operatorHandler(target) {
+	let operatorTarget = target;
+	// Set operator to active
+	operatorActive = true;
+	// Remove all active classes before adding active to current operator
+	removeActiveClass();
+	operatorTarget.classList.add("active");
+	// Disable decimal until the next number input is received
+	decimalState(1);
+	// Set the current number on screen as previous to keep it in memory for the operation
+
+	// if an operator was previously used, perform its equation first
+	if (previousOperator) {
+		displayArea.textContent = performEquation(previousOperator);
+	}
+	previousNumber = Number(displayArea.textContent);
+	previousOperator = operatorTarget.id;
 }
 
 let previousNumber = 0;
-let operator;
+let previousOperator;
 let operatorActive = false;
 let decimalActive = false;
 let resultDisplayed = false;
 
-function eventHandler(e) {
+function clickEventHandler(e) {
 	// If *, /, -, + is clicked
 	if (e.target.classList.contains("operator")) {
-		// Set operator to active
-		operatorActive = true;
-		// Remove all active classes before adding active to current operator
-		removeActiveClass();
-		e.target.classList.add("active");
-		// Disable decimal until the next number input is received
-		decimalState(1);
-		// Set the current number on screen as previous to keep it in memory for the operation
-
-		// if an operator was previously used, perform its equation first
-		if (operator) {
-			displayArea.textContent = performEquation(operator);
-		}
-		previousNumber = Number(displayArea.textContent);
-		operator = e.target.id;
-
-		// if (e.target.id === "add") {
-		// 	return;
-		// } else if (e.target.id === "subtract") {
-		// 	return;
-		// } else if (e.target.id === "multiply") {
-		// 	return;
-		// } else if (e.target.id === "divide") {
-		// 	return;
-		// }
+		operatorHandler(e.target);
 	} else if (e.target.id === "equals") {
-		removeActiveClass();
-		if (!resultDisplayed) {
-			displayArea.textContent = performEquation(operator);
-			resultDisplayed = true;
-			operator = undefined;
-		}
+		showResult();
 	} else if (e.target.classList.contains("number")) {
 		// If the result is on display after previous operation, clear the screen
 		if (resultDisplayed) {
@@ -154,6 +160,46 @@ function eventHandler(e) {
 			clearDisplay();
 		}
 		display(e.target.textContent);
-		// If the previous number in-memory is the same, keep it, if not change it.
+	}
+}
+
+const NUMBERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+const OPERATORS = ["+", "-", "/", "*"];
+
+function keyEventHandler(e) {
+	// console.log(e);
+	let key = e.key;
+	if (NUMBERS.includes(key)) {
+		// If the result is on display after previous operation, clear the screen
+		if (resultDisplayed) {
+			clearDisplay();
+			// resultDisplayed = false;
+		} else if (operatorActive) {
+			// operatorActive = false;
+			clearDisplay();
+		}
+		display(key);
+	} else if (OPERATORS.includes(key)) {
+		if (key === "+") {
+			operatorHandler(document.querySelector("#add"));
+		} else if (key === "-") {
+			operatorHandler(document.querySelector("#subtract"));
+		} else if (key === "*") {
+			operatorHandler(document.querySelector("#multiply"));
+		} else if (key === "/") {
+			operatorHandler(document.querySelector("#divide"));
+		}
+	} else if (key === ".") {
+		if (!decimalActive) {
+			// Activates decimal so it can only be pressed once
+			decimalState(1);
+			displayArea.textContent += ".";
+		}
+	} else if (key === "Enter") {
+		showResult();
+	} else if (key === "Backspace") {
+		deleteInput();
+	} else if (key === "Delete") {
+		clearDisplay(true);
 	}
 }

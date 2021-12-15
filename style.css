@@ -104,25 +104,24 @@ body {
 	display: inline-block;
 	/* border-left: 1px solid rgba(0, 0, 0, 0.4);
 	transition: transform 150ms ease, color 200ms ease-in, border-left 200ms ease-in; */
-	transition: transform 150ms ease;
+	transition: transform 150ms ease, color 200ms ease-in;
 }
 
 .delete-input:hover {
-	color: #555;
-	/* border-left: 1px solid rgba(0, 0, 0, 1); */
+	color: rgb(255, 80, 80);
 	transform: translate(1px, 1px);
 }
 
 .clear-display {
 	flex: 1 1 auto;
-	background-color: chocolate;
+	background-color: rgb(255, 80, 80);
 	color: #eee;
 	padding: 5px 0;
-	transition: transform 150ms ease, background-color 200ms ease-in;
+	transition: transform 150ms ease, background-color 175ms ease-in;
 }
 
 .clear-display:hover {
-	background-color: rgb(158, 79, 22);
+	background-color: rgb(212, 69, 69);
 	transform: translateY(1px);
 }
 
@@ -134,7 +133,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: transform 150ms ease, background-color 200ms ease-in;
+	transition: transform 150ms ease, background-color 175ms ease-in;
 }
 
 .number {
