@@ -74,8 +74,21 @@ body {
 .display {
 	background-color: rgb(214, 214, 214);
 	justify-content: flex-end;
-	padding: 20px 10px;
+	padding: 20px 5px;
 	min-height: 75px;
+	color: #111;
+}
+
+.delete-input {
+	margin-left: 3px;
+	border-left: 1px solid rgba(0, 0, 0, 0.4);
+	transition: transform 150ms ease, color 200ms ease-in, border-left 200ms ease-in;
+}
+
+.delete-input:hover {
+	color: #555;
+	border-left: 1px solid rgba(0, 0, 0, 1);
+	transform: translate(1px, 1px);
 }
 
 .clear-display {
@@ -83,10 +96,12 @@ body {
 	background-color: chocolate;
 	color: #eee;
 	padding: 5px 0;
+	transition: transform 150ms ease, background-color 200ms ease-in;
 }
 
 .clear-display:hover {
 	background-color: rgb(158, 79, 22);
+	transform: translateY(1px);
 }
 
 .number,
@@ -97,6 +112,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: transform 150ms ease, background-color 200ms ease-in;
 }
 
 .number {
@@ -106,6 +122,15 @@ body {
 
 .number:hover {
 	background-color: #777;
+	transform: translateY(1px);
+}
+
+.decimal-active {
+	background-color: #777;
+	color: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .equals,
@@ -126,6 +151,7 @@ body {
 .operator:hover,
 .equals:hover {
 	background-color: rgb(189, 94, 60);
+	transform: translateY(1px);
 }
 
 .disable-select {
