@@ -11,6 +11,10 @@ const equals = document.querySelector("#equals");
 deleteInputBtn.addEventListener("click", (e) => {
 	let currentText = displayArea.textContent;
 	if (currentText) {
+		// If the next string element to be deleted is a decimal point, de-activate it, so it can be used again
+		if (currentText[currentText.length - 1] === ".") {
+			decimalState(0);
+		}
 		displayArea.textContent = currentText.slice(0, currentText.length - 1);
 	}
 });
