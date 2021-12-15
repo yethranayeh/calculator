@@ -80,15 +80,36 @@ body {
 	overflow: hidden;
 }
 
-.delete-input {
+@keyframes blinking-cursor {
+	from {
+		border-left: 1px solid rgba(0, 0, 0, 0);
+	}
+
+	to {
+		border-left: 1px solid rgba(0, 0, 0, 1);
+	}
+}
+
+.delete-area {
 	margin-left: 3px;
-	border-left: 1px solid rgba(0, 0, 0, 0.4);
-	transition: transform 150ms ease, color 200ms ease-in, border-left 200ms ease-in;
+	animation-name: blinking-cursor;
+	animation-duration: 450ms;
+	animation-fill-mode: both;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-timing-function: ease-out;
+}
+
+.delete-input {
+	display: inline-block;
+	/* border-left: 1px solid rgba(0, 0, 0, 0.4);
+	transition: transform 150ms ease, color 200ms ease-in, border-left 200ms ease-in; */
+	transition: transform 150ms ease;
 }
 
 .delete-input:hover {
 	color: #555;
-	border-left: 1px solid rgba(0, 0, 0, 1);
+	/* border-left: 1px solid rgba(0, 0, 0, 1); */
 	transform: translate(1px, 1px);
 }
 
