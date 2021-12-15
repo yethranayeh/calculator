@@ -36,7 +36,7 @@ function display(number) {
 
 function deleteInput() {
 	let currentText = displayArea.textContent;
-	if (currentText === "NaN") {
+	if (currentText === "NaN" || currentText.includes("Siri") || currentText.includes("Stop!")) {
 		displayArea.textContent = "";
 	} else if (currentText) {
 		// If the next string element to be deleted is a decimal point, de-activate it, so it can be used again
@@ -93,7 +93,13 @@ function performEquation(operator) {
 		return previousNumber * Number(displayArea.textContent);
 	} else if (operator === "divide") {
 		// console.log(`Dividing prevNum: ${previousNumber} / displayNum: ${Number(displayArea.textContent)}`);
-		return previousNumber / Number(displayArea.textContent);
+		if (previousNumber === 0 && Number(displayArea.textContent) === 0) {
+			return "You should ask Siri";
+		} else if (previousNumber === 0 || Number(displayArea.textContent) === 0) {
+			return "Stop! You've violated the law!";
+		} else {
+			return previousNumber / Number(displayArea.textContent);
+		}
 	}
 	resultDisplayed = true;
 	// Remove operator name
