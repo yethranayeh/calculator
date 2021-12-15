@@ -21,7 +21,9 @@ deleteInputBtn.addEventListener("click", (e) => {
 	}
 });
 
-clearDisplayBtn.addEventListener("click", clearDisplay);
+clearDisplayBtn.addEventListener("click", function () {
+	clearDisplay(true);
+});
 
 numbers.forEach((number) => {
 	number.addEventListener("click", eventHandler);
@@ -39,12 +41,18 @@ function display(number) {
 	}
 }
 
-function clearDisplay() {
+function clearDisplay(hard) {
 	displayArea.textContent = "";
 	// Remove "active" class from operators
 	removeActiveClass();
 	// De-activate decimal after clearing display
 	decimalState(0);
+	let hardClear = hard ? true : false;
+	resultDisplayed = false;
+	operatorActive = false;
+	if (hardClear) {
+		operator = undefined;
+	}
 }
 
 function removeActiveClass() {
@@ -57,24 +65,31 @@ function decimalState(state) {
 	if (state === 1) {
 		decimal.classList.remove("number");
 		decimal.classList.add("decimal-active");
+		decimal.classList.add("disable-hover");
 		decimalActive = true;
 	} else if (state === 0) {
 		decimal.classList.add("number");
 		decimal.classList.remove("decimal-active");
+		decimal.classList.remove("disable-hover");
 		decimalActive = false;
 	}
 }
 
 function performEquation(operator) {
 	console.log("perform eq");
+	console.log(operator);
 	if (operator === "add") {
-		displayArea.textContent = previousNumber + Number(displayArea.textContent);
+		console.log(`Adding prevNum: ${previousNumber} + displayNum: ${Number(displayArea.textContent)}`);
+		return previousNumber + Number(displayArea.textContent);
 	} else if (operator === "subtract") {
-		displayArea.textContent = previousNumber - Number(displayArea.textContent);
+		console.log(`Subtracting prevNum: ${previousNumber} - displayNum: ${Number(displayArea.textContent)}`);
+		return previousNumber - Number(displayArea.textContent);
 	} else if (operator === "multiply") {
-		displayArea.textContent = previousNumber * Number(displayArea.textContent);
+		console.log(`Multiplying prevNum: ${previousNumber} * displayNum: ${Number(displayArea.textContent)}`);
+		return previousNumber * Number(displayArea.textContent);
 	} else if (operator === "divide") {
-		displayArea.textContent = previousNumber / Number(displayArea.textContent);
+		console.log(`Dividing prevNum: ${previousNumber} / displayNum: ${Number(displayArea.textContent)}`);
+		return previousNumber / Number(displayArea.textContent);
 	}
 	resultDisplayed = true;
 	// Remove operator name
@@ -98,10 +113,12 @@ function eventHandler(e) {
 		// Disable decimal until the next number input is received
 		decimalState(1);
 		// Set the current number on screen as previous to keep it in memory for the operation
+
+		// if an operator was previously used, perform its equation first
+		if (operator) {
+			displayArea.textContent = performEquation(operator);
+		}
 		previousNumber = Number(displayArea.textContent);
-
-		// performEquation(e.target.id);
-
 		operator = e.target.id;
 
 		// if (e.target.id === "add") {
@@ -116,13 +133,15 @@ function eventHandler(e) {
 	} else if (e.target.id === "equals") {
 		removeActiveClass();
 		if (!resultDisplayed) {
-			performEquation(operator);
+			displayArea.textContent = performEquation(operator);
+			resultDisplayed = true;
+			operator = undefined;
 		}
 	} else if (e.target.classList.contains("number")) {
 		// If the result is on display after previous operation, clear the screen
 		if (resultDisplayed) {
 			clearDisplay();
-			resultDisplayed = false;
+			// resultDisplayed = false;
 		}
 		// Decimal handling
 		if (e.target.id === "decimal") {
@@ -131,7 +150,7 @@ function eventHandler(e) {
 				decimalState(1);
 			}
 		} else if (operatorActive) {
-			operatorActive = false;
+			// operatorActive = false;
 			clearDisplay();
 		}
 		display(e.target.textContent);

@@ -183,6 +183,10 @@ body {
 	user-select: none;
 }
 
+.disable-hover {
+	cursor: not-allowed;
+}
+
 .active {
 	background-color: rgb(255, 90, 30);
 	border: 1px dashed #eee;
