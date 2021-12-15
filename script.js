@@ -10,7 +10,9 @@ const equals = document.querySelector("#equals");
 
 deleteInputBtn.addEventListener("click", (e) => {
 	let currentText = displayArea.textContent;
-	if (currentText) {
+	if (currentText === "NaN") {
+		displayArea.textContent = "";
+	} else if (currentText) {
 		// If the next string element to be deleted is a decimal point, de-activate it, so it can be used again
 		if (currentText[currentText.length - 1] === ".") {
 			decimalState(0);
@@ -63,35 +65,65 @@ function decimalState(state) {
 	}
 }
 
-function performEquation() {
-	return;
+function performEquation(operator) {
+	console.log("perform eq");
+	if (operator === "add") {
+		displayArea.textContent = previousNumber + Number(displayArea.textContent);
+	} else if (operator === "subtract") {
+		displayArea.textContent = previousNumber - Number(displayArea.textContent);
+	} else if (operator === "multiply") {
+		displayArea.textContent = previousNumber * Number(displayArea.textContent);
+	} else if (operator === "divide") {
+		displayArea.textContent = previousNumber / Number(displayArea.textContent);
+	}
+	resultDisplayed = true;
+	// Remove operator name
+	operator = undefined;
 }
 
 let previousNumber = 0;
+let operator;
 let operatorActive = false;
 let decimalActive = false;
+let resultDisplayed = false;
 
 function eventHandler(e) {
 	// If *, /, -, + is clicked
 	if (e.target.classList.contains("operator")) {
+		// Set operator to active
 		operatorActive = true;
+		// Remove all active classes before adding active to current operator
 		removeActiveClass();
 		e.target.classList.add("active");
+		// Disable decimal until the next number input is received
 		decimalState(1);
+		// Set the current number on screen as previous to keep it in memory for the operation
+		previousNumber = Number(displayArea.textContent);
 
-		if (e.target.id === "add") {
-			return;
-		} else if (e.target.id === "subtract") {
-			return;
-		} else if (e.target.id === "multiply") {
-			return;
-		} else if (e.target.id === "divide") {
-			return;
-		}
+		// performEquation(e.target.id);
+
+		operator = e.target.id;
+
+		// if (e.target.id === "add") {
+		// 	return;
+		// } else if (e.target.id === "subtract") {
+		// 	return;
+		// } else if (e.target.id === "multiply") {
+		// 	return;
+		// } else if (e.target.id === "divide") {
+		// 	return;
+		// }
 	} else if (e.target.id === "equals") {
 		removeActiveClass();
-		performEquation();
+		if (!resultDisplayed) {
+			performEquation(operator);
+		}
 	} else if (e.target.classList.contains("number")) {
+		// If the result is on display after previous operation, clear the screen
+		if (resultDisplayed) {
+			clearDisplay();
+			resultDisplayed = false;
+		}
 		// Decimal handling
 		if (e.target.id === "decimal") {
 			if (!decimalActive) {
@@ -100,7 +132,6 @@ function eventHandler(e) {
 			}
 		} else if (operatorActive) {
 			operatorActive = false;
-			previousNumber = Number(e.target.textContent);
 			clearDisplay();
 		}
 		display(e.target.textContent);
